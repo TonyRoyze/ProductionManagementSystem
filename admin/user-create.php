@@ -62,6 +62,7 @@ echo "
                     </div>
                     <div class='input-box'>
                         <select name='user_type' required>
+                            <option value=''>Select User Type</option>
                             <option value='ADMIN'>Admin</option>
                             <option value='MANAGER'>Manager</option>
                         </select>

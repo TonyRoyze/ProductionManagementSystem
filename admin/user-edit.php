@@ -81,6 +81,7 @@ echo "
                     </div>
                     <div class='input-box'>
                         <select name='user_type' required>
+                            <option value=''>Select User Type</option>
                             <option value='ADMIN'" .
     ($user_type == "ADMIN" ? " selected" : "") .
     ">Admin</option>

@@ -103,7 +103,8 @@ echo "
                     </div>
 
                     <div class='input-box'>
-                        <select name='part_id' required>";
+                        <select name='part_id' required>
+                            <option value=''>Select Part</option>";
 
 $sql = "SELECT * FROM part";
 $result = $conn->query($sql);
@@ -116,7 +117,7 @@ while ($row = $result->fetch_assoc()) {
     $selected = $row["part_id"] == $part_id ? "selected" : "";
     echo "<option value='" .
         $row["part_id"] .
-        "'>" .
+        "' $selected>" .
         $row["part_name"] .
         "</option>";
 }
