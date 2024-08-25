@@ -83,8 +83,7 @@ if (!empty($part_id)) {
                             <option value=''>Select Workstation</option>";
 
     $sql =
-        "SELECT user.user_name, user.user_id, " .
-        "workstation.workstation_id, workstation.workstation_capacity " .
+        "SELECT user.user_name, user.user_id, workstation.workstation_id " .
         "FROM user JOIN workstation " .
         "ON user.workstation_id = workstation.workstation_id " .
         "WHERE part_id = $part_id";
