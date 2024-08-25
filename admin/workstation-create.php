@@ -88,7 +88,8 @@ echo "
                         <label>Workstation Name</label>
                     </div>
                     <div class='input-box'>
-                        <select name='part_id' required>";
+                        <select name='part_id' required>
+                            <option value=''>Select Part</option>";
 
 $sql = "SELECT * FROM part";
 $result = $conn->query($sql);
@@ -138,5 +139,6 @@ if (!empty($successMessage)) {
 echo "  </div>
     </div>
 ";
+
 
 ?>

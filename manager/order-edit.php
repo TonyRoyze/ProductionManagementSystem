@@ -4,6 +4,12 @@ include "../connector.php";
 include "../functions.php";
 $user_data = checkLogin($conn);
 
+$part_id = isset($_POST["part_id"]) ? $_POST["part_id"] : "";
+$quantity = isset($_POST["quantity"]) ? $_POST["quantity"] : "";
+$workstation_id = isset($_POST["workstation_id"])
+    ? $_POST["workstation_id"]
+    : "";
+
 $errorMessage = "";
 $details = "";
 $successMessage = "";
@@ -28,7 +34,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $part_id = $row["part_id"];
     $quantity = $row["quantity"];
     $workstation_id = $row["workstation_id"];
-} else {
+} elseif (
+    $_SERVER["REQUEST_METHOD"] == "POST" &&
+    !empty($part_id) &&
+    !empty($quantity) &&
+    !empty($workstation_id)
+) {
     $order_id = $_POST["order_id"];
     $part_id = $_POST["part_id"];
     $quantity = $_POST["quantity"];
@@ -65,7 +76,8 @@ echo "
                 <div class='form-container medium'>
 
                     <div class='input-box'>
-                        <select name='part_id' required>";
+                        <select name='part_id' required onchange='this.form.submit()'>
+                            <option value=''>Select Part</option>";
 
 $sql = "SELECT * FROM part";
 $result = $conn->query($sql);
@@ -86,13 +98,14 @@ while ($row = $result->fetch_assoc()) {
 echo "                  </select>
                     </div>
                     <div class='input-box'>
-                        <select name='workstation_id' required>";
+                    <select name='workstation_id' required onchange='this.form.submit()'>
+                        <option value=''>Select Workstation</option>";
 
 $sql =
-    "SELECT user.user_name, user.user_id, " .
-    "workstation.workstation_id, workstation.workstation_capacity " .
+    "SELECT user.user_name, user.user_id, workstation.workstation_id " .
     "FROM user JOIN workstation " .
-    "ON user.workstation_id = workstation.workstation_id";
+    "ON user.workstation_id = workstation.workstation_id " .
+    "WHERE part_id = $part_id";
 $result = $conn->query($sql);
 
 if (!$result) {
@@ -107,10 +120,19 @@ while ($row = $result->fetch_assoc()) {
         "</option>";
 }
 
+$sql = "SELECT workstation_capacity FROM workstation WHERE workstation_id = $workstation_id";
+$result = $conn->query($sql);
+
+if (!$result) {
+    die("Invalid query: " . $conn->connect_error);
+}
+
+$workstation = $result->fetch_assoc();
+
 echo "                  </select>
                     </div>
                     <div class='input-box'>
-                        <input type='number' name='quantity' value='$quantity' max='$workstation_capacity' required>
+                        <input type='number' name='quantity' value='$quantity' max='$workstation[workstation_capacity]' required>
                         <label>Quantity</label>
                     </div>
                 <div class='footer'>
