@@ -2,7 +2,7 @@
 
 $dbServerName = "localhost";
 $dbUserName = "root";
-$dbPassword = "";
+$dbPassword = "deliquescent";
 $dbName = "prodmanage";
 
 $conn = mysqli_connect($dbServerName, $dbUserName, $dbPassword, $dbName);
