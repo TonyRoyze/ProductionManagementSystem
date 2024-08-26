@@ -3,6 +3,18 @@ session_start();
 include "../connector.php";
 include "../functions.php";
 $user_data = checkLogin($conn);
+
+if (isset($_POST["order_id"])) {
+    $order_id = $_POST["order_id"];
+    $current_status = $_POST["order_status"];
+
+    $new_status = ($current_status + 1) % 4;
+
+    $sql = "UPDATE orders SET order_status = $new_status WHERE order_id = $order_id";
+    if ($conn->query($sql) === false) {
+        echo "Error updating record: " . $conn->error;
+    }
+}
 ?>
 
 <?php include "./workstation-header.php"; ?>
@@ -35,7 +47,8 @@ $user_data = checkLogin($conn);
             $sql =
                 "SELECT order_id, part_name, quantity, user_name, order_status " .
                 "FROM orders JOIN user ON orders.workstation_id = user.workstation_id " .
-                "JOIN part ON orders.part_id = part.part_id";
+                "JOIN part ON orders.part_id = part.part_id " .
+                "WHERE order_status < 4";
 
             $result = $conn->query($sql);
 
@@ -49,13 +62,30 @@ $user_data = checkLogin($conn);
                         <td>{$row["part_name"]}</td>
                         <td>{$row["quantity"]}</td>
                         <td>{$row["user_name"]}</td>
-                        <td>" .
+                        <td>
+                            <form method='post'>
+                                <input type='hidden' name='order_id' value='{$row["order_id"]}'>
+                                <input type='hidden' name='order_status' value='{$row["order_status"]}'>
+                                <button type='submit' class='btn-status " .
+                    ($row["order_status"] == 0
+                        ? "red"
+                        : ($row["order_status"] == 1
+                            ? "yellow"
+                            : ($row["order_status"] == 2
+                                ? "green"
+                                : "blue"))) .
+                    "'>" .
                     ($row["order_status"] == 0
                         ? "Not Accepted"
                         : ($row["order_status"] == 1
                             ? "In Progress"
-                            : "Shipped")) .
-                    "</tr>";
+                            : ($row["order_status"] == 2
+                                ? "Shipped"
+                                : "Complete"))) .
+                    "</button>
+                            </form>
+                        </td>
+                    </tr>";
             }
             ?>
             </tbody>

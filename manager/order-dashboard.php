@@ -51,13 +51,23 @@ $user_data = checkLogin($conn);
                         <td>{$row["part_name"]}</td>
                         <td>{$row["quantity"]}</td>
                         <td>{$row["user_name"]}</td>
-                        <td>" .
+                        <td><button class='btn-status " .
+                    ($row["order_status"] == 0
+                        ? "red"
+                        : ($row["order_status"] == 1
+                            ? "yellow"
+                            : ($row["order_status"] == 2
+                                ? "green"
+                                : "blue"))) .
+                    "'>" .
                     ($row["order_status"] == 0
                         ? "Not Accepted"
                         : ($row["order_status"] == 1
                             ? "In Progress"
-                            : "Shipped")) .
-                    "</td>" .
+                            : ($row["order_status"] == 2
+                                ? "Shipped"
+                                : "Complete"))) .
+                    "</button> </td>" .
                     ($row["order_status"] == 0
                         ? "<td class='action'>
                                 <a class='btn-edit bg-default' href='order-edit.php?order_id=$row[order_id]'>
