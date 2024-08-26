@@ -40,7 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         header("location: /manager/order-dashboard.php");
                         exit();
                     } else {
-                        header("location: /workstation/order-dashboard.php");
+                        header(
+                            "location: /workstation/workstation-dashboard.php"
+                        );
                         exit();
                     }
                 } else {
@@ -71,12 +73,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Login</h2>
         <form method='post' class='form'>
             <div class='input-box'>
-                <span class='icon'><ion-icon name='mail-outline'></ion-icon></span>
+                <span class='icon'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-circle-user'>
+                    <circle cx='12' cy='12' r='10'/><circle cx='12' cy='10' r='3'/>
+                    <path d='M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662'/>
+                </svg></span>
                 <input type='text' name='login_username' required>
                 <label>User Name</label>
             </div>
             <div class='input-box'>
-                <span class='icon'><ion-icon name='lock-closed-outline'></ion-icon></span>
+                <span class='icon'><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-key-round'>
+                    <path d='M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z'/>
+                    <circle cx='16.5' cy='7.5' r='.5' fill='currentColor'/>
+                </svg></span>
                 <input type='password' name='login_pass' required>
                 <label>Password</label>
             </div>
@@ -87,7 +95,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 "; ?>
 <!-- <script src="login.js"></script> -->
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
