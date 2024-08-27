@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql =
                 /** @lang text */
                 "INSERT INTO workstation (workstation_capacity, workstation_status, is_active, part_id)" .
-                "VALUES ('$workstation_capacity', 0, 1, $part_id)";
+                "VALUES ('$workstation_capacity', 0, 0, $part_id)";
 
             try {
                 $result = $conn->query($sql);

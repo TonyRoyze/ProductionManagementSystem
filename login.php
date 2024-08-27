@@ -40,8 +40,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         header("location: /manager/order-dashboard.php");
                         exit();
                     } else {
+                        $sql = "SELECT is_active FROM workstation WHERE workstation_id = $user_data[workstation_id]";
+
+                        try {
+                            $result = $conn->query($sql);
+                        } catch (Exception $e) {
+                            $errorMessage = "Invalid Query";
+                        }
+                        $workstation_data = $result->fetch_assoc();
                         header(
-                            "location: /workstation/workstation-dashboard.php"
+                            "location: /workstation/workstation-dashboard.php?workstation_id=$user_data[workstation_id]&is_active=$workstation_data[is_active]"
                         );
                         exit();
                     }
@@ -62,7 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prod Manage</title>
     <link rel="stylesheet" href="styles/common.css">
-    <link rel="stylesheet" href="styles/admin.css">
 
 </head>
 

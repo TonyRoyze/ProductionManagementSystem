@@ -5,14 +5,13 @@ USE prodmanage;
 CREATE TABLE part (
 part_id INT NOT NULL AUTO_INCREMENT,
 part_name VARCHAR(20) NOT NULL,
-part_desc VARCHAR(1000),
+part_desc TEXT,
 CONSTRAINT PK_part_id PRIMARY KEY (part_id)
 );
 
 CREATE TABLE workstation (
 workstation_id INT NOT NULL AUTO_INCREMENT,
 workstation_capacity INT NOT NULL,
-workstation_status INT NOT NULL,
 is_active INT NOT NULL,
 part_id INT NOT NULL,
 CONSTRAINT PK_workstation_id PRIMARY KEY (workstation_id),
