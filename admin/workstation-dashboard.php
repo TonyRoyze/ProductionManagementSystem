@@ -32,7 +32,6 @@ $user_data = checkLogin($conn);
             <tr>
                 <th>Workstation Name</th>
                 <th>Workstation Capacity</th>
-                <th>Worstation Status</th>
                 <th>Is Active</th>
                 <th>Part</th>
                 <th>Actions</th>
@@ -43,7 +42,7 @@ $user_data = checkLogin($conn);
             $sql =
                 /** @lang text **/
                 "SELECT user.user_name, password, " .
-                "workstation.workstation_id, workstation_capacity, workstation_status, is_active, part_name " .
+                "workstation.workstation_id, workstation_capacity, is_active, part_name " .
                 "FROM user JOIN workstation ON user.workstation_id = workstation.workstation_id " .
                 "JOIN part ON part.part_id = workstation.part_id";
             $result = $conn->query($sql);
@@ -57,13 +56,6 @@ $user_data = checkLogin($conn);
                     <tr>
                         <td>{$row["user_name"]}</td>
                         <td>{$row["workstation_capacity"]}</td>
-                        <td>" .
-                    ($row["workstation_status"] == 0
-                        ? "Free"
-                        : ($row["workstation_status"] == 1
-                            ? "In use"
-                            : "Full")) .
-                    "</td>
                         <td>" .
                     ($row["is_active"] == 0 ? "No" : "Yes") .
                     "</td>

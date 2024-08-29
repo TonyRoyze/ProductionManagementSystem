@@ -4,16 +4,48 @@ include "../connector.php";
 include "../functions.php";
 $user_data = checkLogin($conn);
 
-if (isset($_POST["order_id"])) {
+$workstation_id = "";
+$is_active = "";
+
+if (isset($_POST["btn-status"])) {
     $order_id = $_POST["order_id"];
     $current_status = $_POST["order_status"];
 
     $new_status = ($current_status + 1) % 4;
 
     $sql = "UPDATE orders SET order_status = $new_status WHERE order_id = $order_id";
-    if ($conn->query($sql) === false) {
-        echo "Error updating record: " . $conn->error;
+
+    try {
+        $result = $conn->query($sql);
+    } catch (Exception $e) {
+        $errorMessage = "Invalid query";
+        $details = $conn->error;
     }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    $workstation_id = $_GET["workstation_id"];
+    $is_active = $_GET["is_active"];
+    $currentColor = $is_active == 0 ? "red" : "green";
+}
+
+if (isset($_POST["btn-power"])) {
+    $workstation_id = $_POST["workstation_id"];
+    $is_active = $_POST["is_active"];
+
+    $new_is_active = ($is_active + 1) % 2;
+
+    $sql = "UPDATE workstation SET is_active = $new_is_active WHERE workstation_id = $workstation_id";
+
+    try {
+        $result = $conn->query($sql);
+    } catch (Exception $e) {
+        $errorMessage = "Invalid query";
+        $details = $conn->error;
+    }
+
+    $is_active = $new_is_active;
+    $currentColor = $is_active == 0 ? "red" : "green";
 }
 ?>
 
@@ -32,6 +64,16 @@ if (isset($_POST["order_id"])) {
     <div class="dashboard">
         <div class="table-name">
             <h1>Order Details</h1>
+<?php echo "<form method='post'>
+                <input type='hidden' name='workstation_id' value='$workstation_id'>
+                <input type='hidden' name='is_active' value='$is_active'>
+                <button class='btn-power bg-default' name='btn-power'>
+                    <div class='sign-power'>
+                        <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='$currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-power'>
+                        <path d='M12 2v10'/><path d='M18.4 6.6a9 9 0 1 1-12.77.04'/></svg>
+                    </div>
+                </button>
+            </form> "; ?>
         </div>
         <table class="table">
             <thead>
@@ -66,7 +108,7 @@ if (isset($_POST["order_id"])) {
                             <form method='post'>
                                 <input type='hidden' name='order_id' value='{$row["order_id"]}'>
                                 <input type='hidden' name='order_status' value='{$row["order_status"]}'>
-                                <button type='submit' class='btn-status " .
+                                <button type='submit' name='btn-status' class='btn-status " .
                     ($row["order_status"] == 0
                         ? "red"
                         : ($row["order_status"] == 1
