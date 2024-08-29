@@ -10,16 +10,20 @@ $is_active = "";
 if (isset($_POST["btn-status"])) {
     $order_id = $_POST["order_id"];
     $current_status = $_POST["order_status"];
+    $is_active = $_GET["is_active"];
+    $currentColor = $is_active == 0 ? "red" : "green";
 
-    $new_status = ($current_status + 1) % 4;
+    if ($is_active == 1) {
+        $new_status = ($current_status + 1) % 4;
 
-    $sql = "UPDATE orders SET order_status = $new_status WHERE order_id = $order_id";
+        $sql = "UPDATE orders SET order_status = $new_status WHERE order_id = $order_id";
 
-    try {
-        $result = $conn->query($sql);
-    } catch (Exception $e) {
-        $errorMessage = "Invalid query";
-        $details = $conn->error;
+        try {
+            $result = $conn->query($sql);
+        } catch (Exception $e) {
+            $errorMessage = "Invalid query";
+            $details = $conn->error;
+        }
     }
 }
 
@@ -44,8 +48,11 @@ if (isset($_POST["btn-power"])) {
         $details = $conn->error;
     }
 
-    $is_active = $new_is_active;
     $currentColor = $is_active == 0 ? "red" : "green";
+
+    header(
+        "location: /workstation/workstation-dashboard.php?workstation_id=$workstation_id&is_active=$new_is_active"
+    );
 }
 ?>
 
@@ -90,7 +97,7 @@ if (isset($_POST["btn-power"])) {
                 "SELECT order_id, part_name, quantity, user_name, order_status " .
                 "FROM orders JOIN user ON orders.workstation_id = user.workstation_id " .
                 "JOIN part ON orders.part_id = part.part_id " .
-                "WHERE order_status < 4";
+                "WHERE order_status < 3";
 
             $result = $conn->query($sql);
 
