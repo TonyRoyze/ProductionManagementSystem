@@ -97,6 +97,8 @@ echo "
             <form method='post'>
                 <input type='hidden' name='workstation_id' value='$workstation_id'>
                 <div class='form-container medium'>
+                <div class='col-2'>
+                <div class='col'>
                     <div class='input-box'>
                         <input type='text' name='username' value='$username' required>
                         <label>Workstation Name</label>
@@ -130,6 +132,7 @@ echo "              </select>
                     </div>
 
                 </div>
+                <div class='col'>
                 <div class='input-box'>
                     <input type='password' name='pass' value='$pass' required>
                     <label>Password</label>
@@ -137,6 +140,7 @@ echo "              </select>
                 <div class='input-box'>
                     <input type='password' name='repass' value='$repass' required>
                     <label>Re-enter Password</label>
+                </div>
                 </div>
                 </div>
                 <div class='footer'>

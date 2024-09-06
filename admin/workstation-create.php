@@ -78,11 +78,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php
 include "./admin-header.php";
 echo "
-    <div class='wrapper medium'>
+    <div class='wrapper large'>
         <div class='form-box'>
             <h2>New Workstation</h2>
             <form method='post'>
                 <div class='form-container medium'>
+                <div class='col-2'>
+                <div class='col'>
                     <div class='input-box'>
                         <input type='text' name='workstation_name' value='$workstation_name' required>
                         <label>Workstation Name</label>
@@ -114,6 +116,7 @@ echo "              </select>
                     </div>
 
                 </div>
+                <div class='col'>
                 <div class='input-box'>
                     <input type='password' name='pass' value='$pass' required>
                     <label>Password</label>
@@ -121,6 +124,8 @@ echo "              </select>
                 <div class='input-box'>
                     <input type='password' name='repass' value='$repass' required>
                     <label>Re-enter Password</label>
+                </div>
+                </div>
                 </div>
                 <div class='footer'>
                     <button type='submit' class='btn'>Add</button>
