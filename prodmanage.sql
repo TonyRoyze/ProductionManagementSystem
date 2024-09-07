@@ -39,3 +39,28 @@ CONSTRAINT PK_order_id PRIMARY KEY (order_id),
 CONSTRAINT FK_part_id_order_table FOREIGN KEY (part_id) REFERENCES part (part_id),
 CONSTRAINT FK_workstation_id_order_table FOREIGN KEY (workstation_id) REFERENCES workstation (workstation_id)
 );
+
+INSERT INTO part (part_name, part_desc) VALUES
+('Bolt', 'Standard metal bolt'),
+('Nut', 'Hexagonal metal nut'),
+('Washer', 'Flat metal washer'),
+('Screw', 'Phillips head screw');
+
+INSERT INTO workstation (workstation_capacity, is_active, part_id) VALUES
+(100, 1, 1),
+(150, 1, 2),
+(200, 1, 3),
+(120, 0, 4);
+
+INSERT INTO user (user_name, password, user_type, workstation_id) VALUES
+('john_doe', 'hashed_password_1', 'operator', 1),
+('jane_smith', 'hashed_password_2', 'supervisor', NULL),
+('bob_johnson', 'hashed_password_3', 'operator', 2),
+('alice_brown', 'hashed_password_4', 'admin', NULL);
+
+INSERT INTO orders (part_id, quantity, workstation_id, order_status) VALUES
+(1, 50, 1, 0),
+(2, 75, 2, 1),
+(3, 100, 3, 0),
+(4, 60, 4, 2);
+

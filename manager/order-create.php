@@ -21,6 +21,23 @@ if (
     !empty($workstation_id)
 ) {
     do {
+
+        $checkWorkstationSql = "SELECT is_active FROM workstation WHERE workstation_id = $workstation_id";
+        
+        try {
+            $result = $conn->query($checkWorkstationSql);
+            $workstation = $result->fetch_assoc();
+        } catch (Exception $e) {
+            $errorMessage = "Failed to create order";
+            $details = $conn->error;
+            break;
+        }
+        
+        if (!$workstation || $workstation['is_active'] == 0) {
+            $errorMessage = "Cannot create order for inactive workstation";
+            break;
+        }
+
         $sql =
             /** @lang text */
             "INSERT INTO orders (part_id, quantity, workstation_id, order_status)" .
@@ -29,7 +46,7 @@ if (
         try {
             $result = $conn->query($sql);
         } catch (Exception $e) {
-            $errorMessage = "Failed to create Order";
+            $errorMessage = "Failed to create order";
             $details = $conn->error;
             break;
         }
