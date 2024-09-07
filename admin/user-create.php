@@ -1,4 +1,5 @@
-<?php global $conn;
+<?php
+global $conn;
 session_start();
 include "../connector.php";
 include "../functions.php";
@@ -19,31 +20,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pass = $_POST["pass"];
     $repass = $_POST["repass"];
 
-    if ($pass == $repass) {
-        do {
-            $pwd = password_hash($pass, PASSWORD_DEFAULT);
+    $sql = "SELECT * FROM user WHERE user_name = '$user_name'";
 
-            $sql =
-                /** @lang text */
-                "INSERT INTO user (user_name, user_type, password)" .
-                "VALUES ('$username', '$user_type', '$pwd')";
+    try {
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $errorMessage = "Username is already taken";
+        } else {
+            if ($pass == $repass) {
+                $pwd = password_hash($pass, PASSWORD_DEFAULT);
 
-            try {
-                $result = $conn->query($sql);
-            } catch (Exception $e) {
-                $errorMessage = "Invalid query";
-                $details = $conn->error;
-                break;
+                $sql = "INSERT INTO user (user_name, user_type, password) VALUES ('$username', '$user_type', '$pwd')";
+
+                try {
+                    $result = $conn->query($sql);
+                    $successMessage = "User Added Successfully";
+                    // Reset form values
+                    $username = "";
+                    $user_type = "";
+                    $pass = "";
+                    $repass = "";
+                } catch (Exception $e) {
+                    $errorMessage = "Invalid query";
+                    $details = $conn->error;
+                }
+            } else {
+                $errorMessage = "Passwords don't match";
             }
-
-            $successMessage = "User Added Successfully";
-
-            $username = "";
-            $user_type = "";
-            $pass = "";
-        } while (false);
-    } else {
-        $errorMessage = "Passwords don't match";
+        }
+    } catch (Exception $e) {
+        $errorMessage = "Invalid query";
+        $details = $conn->error;
     }
 }
 ?>
@@ -63,8 +70,12 @@ echo "
                     <div class='input-box'>
                         <select name='user_type' required>
                             <option value=''>Select User Type</option>
-                            <option value='ADMIN'>Admin</option>
-                            <option value='MANAGER'>Manager</option>
+                            <option value='ADMIN' " .
+    ($user_type == "ADMIN" ? "selected" : "") .
+    ">Admin</option>
+                            <option value='MANAGER' " .
+    ($user_type == "MANAGER" ? "selected" : "") .
+    ">Manager</option>
                         </select>
                     </div>
                     <div class='input-box'>
@@ -89,5 +100,4 @@ echo "
     </div>
 ";
 ?>
-
 </body>
