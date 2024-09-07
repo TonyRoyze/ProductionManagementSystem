@@ -14,6 +14,6 @@ if (isset($_GET["workstaion_id"])) {
     $sql = "DELETE FROM user WHERE workstation_id = '$workstation_id'";
     $conn->query($sql);
 
-    header("location: ./user-dashboard.php");
+    header("location: ./workstation-dashboard.php");
     exit();
 }

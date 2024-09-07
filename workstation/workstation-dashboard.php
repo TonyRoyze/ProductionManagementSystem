@@ -97,7 +97,7 @@ if (isset($_POST["btn-power"])) {
                 "SELECT order_id, part_name, quantity, user_name, order_status " .
                 "FROM orders JOIN user ON orders.workstation_id = user.workstation_id " .
                 "JOIN part ON orders.part_id = part.part_id " .
-                "WHERE order_status < 3";
+                "WHERE order_status < 3 AND orders.workstation_id = $workstation_id";
 
             $result = $conn->query($sql);
 
