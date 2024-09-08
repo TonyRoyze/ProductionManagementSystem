@@ -21,9 +21,8 @@ if (
     !empty($workstation_id)
 ) {
     do {
-
         $checkWorkstationSql = "SELECT is_active FROM workstation WHERE workstation_id = $workstation_id";
-        
+
         try {
             $result = $conn->query($checkWorkstationSql);
             $workstation = $result->fetch_assoc();
@@ -32,8 +31,8 @@ if (
             $details = $conn->error;
             break;
         }
-        
-        if (!$workstation || $workstation['is_active'] == 0) {
+
+        if (!$workstation || $workstation["is_active"] == 0) {
             $errorMessage = "Cannot create order for inactive workstation";
             break;
         }
@@ -63,7 +62,7 @@ if (
 <?php
 include "./manager-header.php";
 echo "
-    <div class='wrapper medium'>
+    <div class='wrapper medium flex-start'>
         <div class='form-box'>
             <h2>New Order</h2>
             <form method='post'>

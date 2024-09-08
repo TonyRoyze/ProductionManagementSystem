@@ -10,6 +10,10 @@
     top: 10px;
 }
 
+.wrapper.flex-start {
+    align-items: flex-start;
+}
+
 .column {
     width: 430px;
 }
