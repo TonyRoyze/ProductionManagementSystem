@@ -48,19 +48,14 @@ INSERT INTO part (part_name, part_desc) VALUES
 
 INSERT INTO workstation (workstation_capacity, is_active, part_id) VALUES
 (100, 1, 1),
-(150, 1, 2),
-(200, 1, 3),
-(120, 0, 4);
+(150, 0, 2);
 
 INSERT INTO user (user_name, password, user_type, workstation_id) VALUES
-('john_doe', 'hashed_password_1', 'operator', 1),
-('jane_smith', 'hashed_password_2', 'supervisor', NULL),
-('bob_johnson', 'hashed_password_3', 'operator', 2),
-('alice_brown', 'hashed_password_4', 'admin', NULL);
+('uoc', 'uoc', 'ADMIN', NULL),
+('jane_smith', 'jane', 'MANAGER', ),
+('bob_johnson', 'bob', 'WORKSTATION', 1),
+('alice_brown', 'alice', 'WORKSTATION', 2);
 
 INSERT INTO orders (part_id, quantity, workstation_id, order_status) VALUES
 (1, 50, 1, 0),
-(2, 75, 2, 1),
-(3, 100, 3, 0),
-(4, 60, 4, 2);
-
+(2, 75, 2, 1);
