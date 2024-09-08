@@ -49,6 +49,7 @@ if (isset($_POST["btn-power"])) {
     }
 
     $currentColor = $is_active == 0 ? "red" : "green";
+    $workstation_id = $_GET["workstation_id"];
 
     header(
         "location: /workstation/workstation-dashboard.php?workstation_id=$workstation_id&is_active=$new_is_active"
@@ -93,6 +94,7 @@ if (isset($_POST["btn-power"])) {
             </thead>
             <tbody>
             <?php
+            $workstation_id = $_GET["workstation_id"];
             $sql =
                 "SELECT order_id, part_name, quantity, user_name, order_status " .
                 "FROM orders JOIN user ON orders.workstation_id = user.workstation_id " .
