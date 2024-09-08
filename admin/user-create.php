@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pass = $_POST["pass"];
     $repass = $_POST["repass"];
 
-    $sql = "SELECT * FROM user WHERE user_name = '$user_name'";
+    $sql = "SELECT * FROM user WHERE user_name = '$username'";
 
     try {
         $result = $conn->query($sql);

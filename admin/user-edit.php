@@ -10,14 +10,14 @@ $details = "";
 $successMessage = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if (!isset($_GET["username"])) {
+    if (!isset($_GET["user_id"])) {
         header("location: ./user-dashboard.php");
         exit();
     }
 
-    $username = $_GET["username"];
+    $user_id = $_GET["user_id"];
 
-    $sql = "SELECT * FROM user WHERE user_name='$username'";
+    $sql = "SELECT * FROM user WHERE user_id='$user_id'";
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
 
@@ -31,37 +31,50 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $pass = "";
     $repass = "";
 } else {
-    $username = $_POST["username"];
+    $user_id = $_POST["user_id"];
     $name = $_POST["name"];
     $user_type = $_POST["user_type"];
     $pass = $_POST["pass"];
     $repass = $_POST["repass"];
 
-    if ($pass == $repass) {
-        do {
-            $pwd = password_hash($pass, PASSWORD_DEFAULT);
+    $sql = "SELECT * FROM user WHERE user_name = '$name'";
 
-            $sql =
-                /** @lang text */
-                "UPDATE user " .
-                "SET user_name = '$name', user_type = '$user_type', password = '$pwd' " .
-                "WHERE user_name = '$username'";
+    try {
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $errorMessage = "Username is already taken";
+        } else {
+            if ($pass == $repass) {
+                $pwd = password_hash($pass, PASSWORD_DEFAULT);
 
-            try {
-                $result = $conn->query($sql);
-            } catch (Exception $e) {
-                $errorMessage = "Invalid query";
-                $details = $conn->error;
-                break;
+                $sql =
+                    /** @lang text */
+                    "UPDATE user " .
+                    "SET user_name = '$name', user_type = '$user_type', password = '$pwd' " .
+                    "WHERE user_id = '$user_id'";
+
+                try {
+                    $result = $conn->query($sql);
+                    $successMessage = "User Updated Successfully";
+                    // Reset form values
+                    $username = "";
+                    $user_type = "";
+                    $pass = "";
+                    $repass = "";
+
+                    header("location: ./user-dashboard.php");
+                    exit();
+                } catch (Exception $e) {
+                    $errorMessage = "Invalid query";
+                    $details = $conn->error;
+                }
+            } else {
+                $errorMessage = "Passwords don't match";
             }
-
-            $successMessage = "User Updated Successfully";
-
-            header("location: ./user-dashboard.php");
-            exit();
-        } while (false);
-    } else {
-        $errorMessage = "Passwords don't match";
+        }
+    } catch (Exception $e) {
+        $errorMessage = "Invalid query";
+        $details = $conn->error;
     }
 }
 ?>
@@ -73,7 +86,7 @@ echo "
         <div class='form-box'>
             <h2>Edit User</h2>
             <form method='post'>
-                <input type='hidden' name='username' value='$username'>
+                <input type='hidden' name='user_id' value='$user_id'>
                 <div class='form-container medium'>
                     <div class='input-box'>
                         <input type='text' name='name' value='$name' required>

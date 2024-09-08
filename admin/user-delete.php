@@ -5,10 +5,10 @@ include "../functions.php";
 
 $user_data = checkLogin($conn);
 
-if (isset($_GET["username"])) {
-    $username = $_GET["username"];
+if (isset($_GET["user_id"])) {
+    $user_id = $_GET["user_id"];
 
-    $sql = "DELETE FROM user WHERE user_name = '$username'";
+    $sql = "DELETE FROM user WHERE user_id = '$user_id'";
     $conn->query($sql);
 
     header("location: ./user-dashboard.php");
