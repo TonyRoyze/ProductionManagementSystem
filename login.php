@@ -34,10 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION["Username"] = $user_data["user_name"];
                     $successMessage = "Logged In Successfully";
                     if ($user_data["user_type"] == "ADMIN") {
-                        header("location: /admin/user-dashboard.php");
+                        header("location: ./admin/user-dashboard.php");
                         exit();
                     } elseif ($user_data["user_type"] == "MANAGER") {
-                        header("location: /manager/order-dashboard.php");
+                        header("location: ./manager/order-dashboard.php");
                         exit();
                     } else {
                         $sql = "SELECT is_active FROM workstation WHERE workstation_id = $user_data[workstation_id]";
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                         $workstation_data = $result->fetch_assoc();
                         header(
-                            "location: /workstation/workstation-dashboard.php?workstation_id=$user_data[workstation_id]&is_active=$workstation_data[is_active]"
+                            "location: ./workstation/workstation-dashboard.php?workstation_id=$user_data[workstation_id]&is_active=$workstation_data[is_active]"
                         );
                         exit();
                     }
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prod Manage</title>
-    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="./styles/common.css">
 
 </head>
 

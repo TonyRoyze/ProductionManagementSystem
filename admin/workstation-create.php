@@ -129,7 +129,7 @@ echo "              </select>
                 </div>
                 <div class='footer'>
                     <button type='submit' class='btn'>Add</button>
-                    <a class='btn' href='workstation-dashboard.php'>Cancel</a>
+                    <a class='btn' href='./workstation-dashboard.php'>Cancel</a>
                 </div>
             </form>";
 

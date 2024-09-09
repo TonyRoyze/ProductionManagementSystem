@@ -114,7 +114,7 @@ echo "
                 </div>
                 <div class='footer'>
                     <button type='submit' class='btn'>Update</button>
-                    <a class='btn' href='user-dashboard.php'>Cancel</a>
+                    <a class='btn' href='./user-dashboard.php'>Cancel</a>
                 </div>
             </form>" .
     (empty($errorMessage)

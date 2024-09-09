@@ -16,7 +16,7 @@ $successMessage = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (!isset($_GET["order_id"])) {
-        header("location: /order-dashboard.php");
+        header("location: ./order-dashboard.php");
         exit();
     }
 
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $row = $result->fetch_assoc();
 
     if (!$row) {
-        header("location: /order-dashboard.php");
+        header("location: ./order-dashboard.php");
         exit();
     }
 
