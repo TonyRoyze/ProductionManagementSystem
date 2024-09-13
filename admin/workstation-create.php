@@ -35,18 +35,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
             }
 
-            $sql2 =
-                "SELECT workstation_id FROM workstation ORDER BY workstation_id DESC LIMIT 1";
+            $workstation_id = $conn->insert_id;
 
-            try {
-                $result = $conn->query($sql2);
-            } catch (Exception $e) {
-                $errorMessage = "Failed to find Workstation ID";
-                $details = $conn->error;
-                break;
-            }
+            // $sql2 =
+            //     "SELECT workstation_id FROM workstation ORDER BY workstation_id DESC LIMIT 1";
 
-            $workstation_id = $result->fetch_assoc();
+            // try {
+            //     $result = $conn->query($sql2);
+            // } catch (Exception $e) {
+            //     $errorMessage = "Failed to find Workstation ID";
+            //     $details = $conn->error;
+            //     break;
+            // }
+
+            // $workstation_id = $result->fetch_assoc();
+            // $workstation_id = $workstation_id['workstation_id'];
 
             $pwd = password_hash($pass, PASSWORD_DEFAULT);
 

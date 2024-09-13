@@ -8,8 +8,9 @@ if (isset($_GET["order_id"])) {
     $order_id = $_GET["order_id"];
 
     $sql = "DELETE FROM orders WHERE order_id = '$order_id'";
-    $conn->query($sql);
-
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $order_id);
+    $stmt->execute();
 
 
     header("location: ./order-dashboard.php");

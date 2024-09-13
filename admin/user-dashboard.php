@@ -66,7 +66,9 @@ if (isset($_GET["search"])) {
                 $result = $stmt->get_result();
             } else {
                 $sql = "SELECT * FROM user WHERE workstation_id IS NULL";
-                $result = $conn->query($sql);
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+                $result = $stmt->get_result();
             }
 
             if (!$result) {

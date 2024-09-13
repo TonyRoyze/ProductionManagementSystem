@@ -19,10 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql =
             /** @lang text */
             "INSERT INTO part (part_name, part_desc)" .
-            "VALUES ('$part_name', '$part_desc')";
+            "VALUES (?, ?)";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $part_name, $part_desc);
+        $stmt->execute();
 
         try {
-            $result = $conn->query($sql);
+            $result = $stmt->execute();
         } catch (Exception $e) {
             $errorMessage = "Invalid query";
             $details = $conn->error;

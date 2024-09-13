@@ -66,8 +66,11 @@ $searchTerm = isset($_GET["search"]) ? $_GET["search"] : "";
                 FROM orders
                 JOIN user ON orders.workstation_id = user.workstation_id
                 JOIN part ON orders.part_id = part.part_id
-                WHERE part.part_name LIKE '%$searchTerm%'";
-            $result = $conn->query($sql);
+                WHERE part.part_name LIKE ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $searchTerm);
+            $stmt->execute();
+            $result = $stmt->get_result();
             if (!$result) {
                 die("Invalid query" . $conn->connect_error);
             }

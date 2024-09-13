@@ -15,14 +15,20 @@ if (isset($_GET["workstation_id"])) {
     if ($row["count"] > 0) {
         echo "<script>alert('Cannot delete workstation because there are orders bieng processed.'); window.location.href = './part-dashboard.php';</script>";
     } else {
-        $sql = "DELETE FROM orders WHERE workstation_id = '$workstation_id'";
-        $conn->query($sql);
+        $sql = "DELETE FROM orders WHERE workstation_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $workstation_id);
+        $stmt->execute();
 
-        $sql = "DELETE FROM user WHERE workstation_id = '$workstation_id'";
-        $conn->query($sql);
+        $sql = "DELETE FROM user WHERE workstation_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $workstation_id);
+        $stmt->execute();
 
-        $sql = "DELETE FROM workstation WHERE workstation_id = '$workstation_id'";
-        $conn->query($sql);
+        $sql = "DELETE FROM workstation WHERE workstation_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $workstation_id);
+        $stmt->execute();
 
         header("location: ./workstation-dashboard.php");
         exit();

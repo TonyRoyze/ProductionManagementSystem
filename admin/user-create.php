@@ -20,7 +20,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pass = $_POST["pass"];
     $repass = $_POST["repass"];
 
-    $sql = "SELECT * FROM user WHERE user_name = '$username'";
+    $sql = "SELECT * FROM user WHERE user_name = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     try {
         $result = $conn->query($sql);
