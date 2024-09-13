@@ -26,7 +26,7 @@ include "./manager-header.php";
         <div class="help-content">
             <h2>Manager Dashboard Overview</h2>
             <p>As a manager, you have the responsibility to oversee production orders and manage workstation assignments. Here are the key features and tasks you can perform:</p>
-            
+
             <h3>Order Management</h3>
             <ul>
                 <li>Create new production orders</li>
@@ -50,7 +50,7 @@ include "./manager-header.php";
             </ul>
 
             <h2>Common Tasks</h2>
-            
+
             <h3>Creating a New Order</h3>
             <ol>
                 <li>Click on "Create New Order" in the Order Dashboard</li>
@@ -76,8 +76,6 @@ include "./manager-header.php";
                 <li>Monitor workstation performance and address any efficiency issues promptly</li>
             </ul>
 
-            <h2>Need Further Assistance?</h2>
-            <p>If you encounter any issues or have questions about using the Manager Dashboard, please contact the system administrator or refer to the detailed user manual for more in-depth information.</p>
         </div>
     </div>
 </body>

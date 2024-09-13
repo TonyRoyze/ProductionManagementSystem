@@ -25,13 +25,12 @@ include "./admin-header.php";
         </div>
         <div class="help-content">
             <h2>User Roles and Functionalities</h2>
-            
+
             <h3>Admin</h3>
             <ul>
                 <li>Manage users (create, edit, delete)</li>
                 <li>Manage workstations (create, edit, delete)</li>
                 <li>Manage parts (create, edit, delete)</li>
-                <li>View system-wide reports and analytics</li>
             </ul>
 
             <h3>Manager</h3>
@@ -46,11 +45,10 @@ include "./admin-header.php";
             <ul>
                 <li>View assigned orders</li>
                 <li>Update order status (start, pause, complete)</li>
-                <li>Report issues or maintenance needs</li>
             </ul>
 
             <h2>Common Tasks</h2>
-            
+
             <h3>Creating a New Order</h3>
             <ol>
                 <li>Log in as a Manager</li>
@@ -68,9 +66,6 @@ include "./admin-header.php";
                 <li>Choose the new status (e.g., In Progress, Completed)</li>
                 <li>Save the changes</li>
             </ol>
-
-            <h2>Need Further Assistance?</h2>
-            <p>If you need additional help or have specific questions, please contact your system administrator or refer to the detailed user manual.</p>
         </div>
     </div>
 </body>

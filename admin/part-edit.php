@@ -34,7 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $part_desc = htmlspecialchars($_POST["part_desc"]);
 
     do {
-        $sql = "UPDATE part SET part_name = '$part_name', part_desc = '$part_desc' WHERE part_id = $part_id";
+        $sql = "UPDATE part SET part_name = ?, part_desc = ? WHERE part_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssi", $part_name, $part_desc, $part_id);
+        $result = $stmt->execute();
 
         try {
             $result = $conn->query($sql);
@@ -72,7 +75,7 @@ echo "
                 </div>
                 <div class='footer'>
                     <button type='submit' class='btn'>Update</button>
-                    <a class='btn' href='part-dashboard.php'>Cancel</a>
+                    <a class='btn' href='./part-dashboard.php'>Cancel</a>
                 </div>
             </form>" .
     (empty($errorMessage)

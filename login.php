@@ -14,51 +14,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!empty($login_username) && !empty($login_pass)) {
-        do {
-            $sql = "SELECT * FROM user WHERE user_name = '$login_username' LIMIT 1";
+        $sql = "SELECT * FROM user WHERE user_name = ? LIMIT 1";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $login_username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-            try {
-                $result = $conn->query($sql);
-            } catch (Exception $e) {
-                $errorMessage = "Invalid Query";
-                break;
-            }
-
-            if ($result && mysqli_num_rows($result) > 0) {
-                $user_data = $result->fetch_assoc();
-
-                if (
-                    password_verify($login_pass, $user_data["password"]) ||
-                    $user_data["password"] == $login_pass
-                ) {
-                    $_SESSION["Username"] = $user_data["user_name"];
-                    $successMessage = "Logged In Successfully";
-                    if ($user_data["user_type"] == "ADMIN") {
-                        header("location: /admin/user-dashboard.php");
-                        exit();
-                    } elseif ($user_data["user_type"] == "MANAGER") {
-                        header("location: /manager/order-dashboard.php");
-                        exit();
-                    } else {
-                        $sql = "SELECT is_active FROM workstation WHERE workstation_id = $user_data[workstation_id]";
-
-                        try {
-                            $result = $conn->query($sql);
-                        } catch (Exception $e) {
-                            $errorMessage = "Invalid Query";
-                        }
-                        $workstation_data = $result->fetch_assoc();
-                        header(
-                            "location: /workstation/workstation-dashboard.php?workstation_id=$user_data[workstation_id]&is_active=$workstation_data[is_active]"
-                        );
-                        exit();
-                    }
+        if ($result && $result->num_rows > 0) {
+            $user_data = $result->fetch_assoc();
+            if (password_verify($login_pass, $user_data["password"])) {
+                $_SESSION["Username"] = $user_data["user_name"];
+                $successMessage = "Logged In Successfully";
+                if ($user_data["user_type"] == "ADMIN") {
+                    header("location: ./admin/user-dashboard.php");
+                    exit();
+                } elseif ($user_data["user_type"] == "MANAGER") {
+                    header("location: ./manager/order-dashboard.php");
+                    exit();
                 } else {
-                    $errorMessage = "Username or Password is Incorrect";
-                    break;
+                    $sql = "SELECT is_active FROM workstation WHERE workstation_id = $user_data[workstation_id]";
+
+                    try {
+                        $result = $conn->query($sql);
+                    } catch (Exception $e) {
+                        $errorMessage = "Invalid Query";
+                    }
+                    $workstation_data = $result->fetch_assoc();
+                    header(
+                        "location: ./workstation/workstation-dashboard.php?workstation_id=$user_data[workstation_id]&is_active=$workstation_data[is_active]"
+                    );
+                    exit();
                 }
+            } else {
+                $errorMessage = "Username or Password is Incorrect";
             }
-        } while (false);
+        }
     }
 }
 ?>
@@ -69,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prod Manage</title>
-    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="./styles/common.css">
 
 </head>
 

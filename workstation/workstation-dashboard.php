@@ -95,13 +95,13 @@ if (isset($_POST["btn-power"])) {
             <tbody>
             <?php
             $workstation_id = $_GET["workstation_id"];
-            $sql =
-                "SELECT order_id, part_name, quantity, user_name, order_status " .
-                "FROM orders JOIN user ON orders.workstation_id = user.workstation_id " .
-                "JOIN part ON orders.part_id = part.part_id " .
-                "WHERE order_status < 3 AND orders.workstation_id = $workstation_id";
-
+            $sql = "SELECT order_id, part_name, quantity, user_name, order_status 
+                    FROM orders 
+                    JOIN user ON orders.workstation_id = user.workstation_id 
+                    JOIN part ON orders.part_id = part.part_id 
+                    WHERE order_status < 3 AND orders.workstation_id = $workstation_id";
             $result = $conn->query($sql);
+            $result = $stmt->get_result();
 
             if (!$result) {
                 die("Invalid query" . $conn->connect_error);

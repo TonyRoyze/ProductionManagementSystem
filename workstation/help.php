@@ -25,7 +25,7 @@ include "./workstation-header.php";
         </div>
         <div class="help-content">
             <h2>Workstation Dashboard Guide</h2>
-            
+
             <h3>Your Responsibilities</h3>
             <ul>
                 <li>View and manage assigned orders</li>
@@ -41,7 +41,7 @@ include "./workstation-header.php";
             </ul>
 
             <h3>Common Tasks</h3>
-            
+
             <h4>Updating Order Status</h4>
             <ol>
                 <li>Locate the order in the Order Details table</li>
@@ -71,8 +71,6 @@ include "./workstation-header.php";
                 <li>Double-check completed orders before marking them as finished</li>
             </ul>
 
-            <h3>Need Further Assistance?</h3>
-            <p>If you encounter any issues or have questions about using the Workstation Dashboard, please contact your supervisor or the system administrator for support.</p>
         </div>
     </div>
 </body>

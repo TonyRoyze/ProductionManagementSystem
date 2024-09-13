@@ -16,18 +16,21 @@ $successMessage = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (!isset($_GET["order_id"])) {
-        header("location: /order-dashboard.php");
+        header("location: ./order-dashboard.php");
         exit();
     }
 
     $order_id = $_GET["order_id"];
 
-    $sql = "SELECT * FROM orders WHERE order_id=$order_id";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM orders WHERE order_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $order_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $row = $result->fetch_assoc();
 
     if (!$row) {
-        header("location: /order-dashboard.php");
+        header("location: ./order-dashboard.php");
         exit();
     }
 
@@ -48,12 +51,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     do {
         $sql =
             /** @lang text */
-            "UPDATE orders " .
-            "SET part_id = $part_id, quantity = $quantity, workstation_id = $workstation_id " .
-            "WHERE order_id = $order_id";
+            "UPDATE orders SET part_id = ?, quantity = ?, workstation_id = ? WHERE order_id = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("iiii", $part_id, $quantity, $workstation_id, $order_id);
 
         try {
-            $result = $conn->query($sql);
+            $result = $stmt->execute();
         } catch (Exception $e) {
             $errorMessage = "Failed to update Order";
             $details = $conn->error;
@@ -80,7 +84,9 @@ echo "
                             <option value=''>Select Part</option>";
 
 $sql = "SELECT * FROM part";
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if (!$result) {
     die("Invalid query: " . $conn->connect_error);
@@ -106,7 +112,10 @@ $sql =
     "FROM user JOIN workstation " .
     "ON user.workstation_id = workstation.workstation_id " .
     "WHERE part_id = $part_id";
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $part_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if (!$result) {
     die("Invalid query: " . $conn->connect_error);
@@ -121,7 +130,10 @@ while ($row = $result->fetch_assoc()) {
 }
 
 $sql = "SELECT workstation_capacity FROM workstation WHERE workstation_id = $workstation_id";
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $workstation_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if (!$result) {
     die("Invalid query: " . $conn->connect_error);

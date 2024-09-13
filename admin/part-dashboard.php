@@ -25,7 +25,7 @@ $user_data = checkLogin($conn);
             <div class="table-action">
                 <div class="group">
                         <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                            <g><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path></g>
+                            <g><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5z"></path></g>
                         </svg>
                         <form method="post">
                         <input placeholder="Search" type="search" class="input" name="search" value="<?php echo isset(
@@ -35,7 +35,7 @@ $user_data = checkLogin($conn);
                             : ""; ?>">
                     </form>
                 </div>
-                <a class='btn-animate bg-default' href='part-create.php'>
+                <a class='btn-animate bg-default' href='./part-create.php'>
                   <div class='sign'><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus">
                       <path d="M5 12h14"/><path d="M12 5v14"/></svg></div>
                   <div class='text'>Create</div>
@@ -55,8 +55,12 @@ $user_data = checkLogin($conn);
             <?php
             $searchTerm = isset($_POST["search"]) ? $_POST["search"] : "";
 
-            $sql = "SELECT * FROM part WHERE part_name LIKE '%$searchTerm%' OR part_desc LIKE '%$searchTerm%'";
-            $result = $conn->query($sql);
+            $sql = "SELECT * FROM part WHERE part_name LIKE ? OR part_desc LIKE ?";
+            $stmt = $conn->prepare($sql);
+            $searchParam = "%$searchTerm%";
+            $stmt->bind_param("ss", $searchParam, $searchParam);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
             if (!$result) {
                 die("Invalid query: " . $conn->connect_error);
@@ -69,13 +73,13 @@ $user_data = checkLogin($conn);
                         <td>$row[part_name]</td>
                         <td>$desc</td>
                         <td class='action'>
-                        <a class='btn-edit bg-default' href='part-edit.php?part_id=$row[part_id]'>
+                        <a class='btn-edit bg-default' href='./part-edit.php?part_id=$row[part_id]'>
                             <div class='sign'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-pencil'>
                                 <path d='M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z'/>
                                 <path d='m15 5 4 4'/></svg>
                             </div>
                         </a>
-                        <a class='btn-delete bg-red' href='part-delete.php?part_id=$row[part_id]'>
+                        <a class='btn-delete bg-red' href='./part-delete.php?part_id=$row[part_id]'>
                             <div class='sign'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-trash-2'>
                             <path d='M3 6h18'/><path d='M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'/><path d='M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'/><line x1='10' x2='10' y1='11' y2='17'/><line x1='14' x2='14' y1='11' y2='17'/></svg>
                             </div>

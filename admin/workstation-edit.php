@@ -23,17 +23,19 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         "workstation.workstation_id, workstation_capacity, part.part_id " .
         "FROM user JOIN workstation ON user.workstation_id = workstation.workstation_id " .
         "JOIN part ON part.part_id = workstation.part_id WHERE workstation.workstation_id =$workstation_id";
-    $result = $conn->query($sql);
-    $row = $result->fetch_assoc();
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $workstation_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if (!$row) {
+    if (!$result) {
         header("location: ./workstation-dashboard.php");
         exit();
     }
 
-    $username = $row["user_name"];
-    $workstation_capacity = $row["workstation_capacity"];
-    $part_id = $row["part_id"];
+    $username = $result["user_name"];
+    $workstation_capacity = $result["workstation_capacity"];
+    $part_id = $result["part_id"];
     $pass = "";
     $repass = "";
 } else {
@@ -55,8 +57,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 "SET user_name = '$username', password = '$pwd' " .
                 "WHERE workstation_id = '$workstation_id'";
 
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss", $username, $pwd);
+            $stmt->execute();
+
             try {
-                $result = $conn->query($sql);
+                $result = $stmt->execute();
             } catch (Exception $e) {
                 $errorMessage = "Invalid query";
                 $details = $conn->error;
@@ -69,8 +75,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 "SET workstation_capacity = '$workstation_capacity', part_id = '$part_id' " .
                 "WHERE workstation_id = '$workstation_id'";
 
+            $stmt2 = $conn->prepare($sql2);
+            $stmt2->bind_param("ii", $workstation_capacity, $part_id);
+            $stmt2->execute();
+
             try {
-                $result = $conn->query($sql2);
+                $result = $stmt2->execute();
             } catch (Exception $e) {
                 $errorMessage = "Invalid query";
                 $details = $conn->error;
@@ -145,7 +155,7 @@ echo "              </select>
                 </div>
                 <div class='footer'>
                     <button type='submit' class='btn'>Update</button>
-                    <a class='btn' href='workstation-dashboard.php'>Cancel</a>
+                    <a class='btn' href='./workstation-dashboard.php'>Cancel</a>
                 </div>
             </form>" .
     (empty($errorMessage)

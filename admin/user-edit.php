@@ -17,8 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     $user_id = $_GET["user_id"];
 
-    $sql = "SELECT * FROM user WHERE user_id='$user_id'";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM user WHERE user_id = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $row = $result->fetch_assoc();
 
     if (!$row) {
@@ -37,7 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $pass = $_POST["pass"];
     $repass = $_POST["repass"];
 
-    $sql = "SELECT * FROM user WHERE user_name = '$name'";
+    $sql = "SELECT * FROM user WHERE user_name = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     try {
         $result = $conn->query($sql);
@@ -50,8 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 $sql =
                     /** @lang text */
                     "UPDATE user " .
-                    "SET user_name = '$name', user_type = '$user_type', password = '$pwd' " .
-                    "WHERE user_id = '$user_id'";
+                    "SET user_name = ?, user_type = ?, password = ? " .
+                    "WHERE user_id = ?";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("sssi", $name, $user_type, $pwd, $user_id);
 
                 try {
                     $result = $conn->query($sql);
@@ -114,7 +124,7 @@ echo "
                 </div>
                 <div class='footer'>
                     <button type='submit' class='btn'>Update</button>
-                    <a class='btn' href='user-dashboard.php'>Cancel</a>
+                    <a class='btn' href='./user-dashboard.php'>Cancel</a>
                 </div>
             </form>" .
     (empty($errorMessage)
